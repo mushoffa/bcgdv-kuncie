@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "order-service/domain/entity/pb";
+option go_package = "github.com/mushoffa/bcgdv-kuncie/protos";
 
 import "google/protobuf/empty.proto";
 

@@ -1,7 +1,7 @@
 syntax="proto3";
 //package pb;
 
-option go_package = "promotion-service/domain/entity/pb";
+option go_package = "github.com/mushoffa/bcgdv-kuncie/protos";
 
 import "google/protobuf/empty.proto";
 
