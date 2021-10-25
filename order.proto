@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+option go_package = "order-service/domain/entity/pb";
+
+import "google/protobuf/empty.proto";
+
+// @Created 14/10/2021
+message OrderProduct {
+	string sku = 1;
+	string name = 2;
+	double price = 3;
+	uint32 qty = 4;
+}
+
+// @Created 14/10/2021
+message Cart {
+	string id = 1;
+	string name = 2;
+	double totalPrice = 3;
+	repeated OrderProduct products = 4;
+}
+
+// @Created 14/10/2021
+message CreateCartRequest {
+	string name = 1;
+}
+
+// @Created 14/10/2021
+message CreateCartResponse {
+	string id = 1;
+	string name = 2;
+	double totalPrice = 3;
+}
+
+// @Created 20/10/2021
+message GetCartByIDRequest {
+	string id = 1;
+}
+
+// @Created 20/10/2021
+message GetCartByIDResponse {
+	string id = 1;
+	string name = 2;
+	double totalPrice = 3;
+	repeated OrderProduct items = 4;
+}
+
+// @Created 20/10/2021
+message GetAllCartsResponse {
+	repeated Cart carts = 1;
+}
+
+// @Created 14/10/2021
+// @Created 20/10/2021
+message AddOrderProductRequest {
+	string id = 1;
+	string sku = 2;
+	uint32 qty = 3;
+	//OrderProduct product = 2;
+}
+
+// @Created 14/10/2021
+message AddOrderProductResponse {
+	Cart cart = 1;
+}
+
+// @Created 14/10/2021
+message CheckoutCartRequest {
+	string id = 1;
+}
+
+// @Created 14/10/2021
+message CheckoutCartResponse {
+	Cart order = 1;
+}
+
+// @Created 14/10/2021
+// @Updated 20/10/2021
+service OrderService {
+	rpc CreateCart(CreateCartRequest) returns (CreateCartResponse);
+	rpc GetCartByID(GetCartByIDRequest) returns (GetCartByIDResponse);
+	rpc GetAllCarts(google.protobuf.Empty) returns (GetAllCartsResponse);
+	rpc AddOrderProduct(AddOrderProductRequest) returns (AddOrderProductResponse);
+	rpc CheckoutCart(CheckoutCartRequest) returns (CheckoutCartResponse);
+}

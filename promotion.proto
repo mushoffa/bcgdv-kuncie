@@ -1,0 +1,93 @@
+syntax="proto3";
+//package pb;
+
+option go_package = "promotion-service/domain/entity/pb";
+
+import "google/protobuf/empty.proto";
+
+// @Created 13/10/2021
+// @Updated 18/10/2021
+message Promotion {
+	string id = 1;
+	bytes created = 2;
+	bytes updated = 3;
+	string code = 4;
+	string sku = 5;
+	uint32 qty = 6;
+	string freebies = 7;
+	uint32 freebiesQty = 8;
+	string type = 9;
+}
+
+// @Created 13/10/2021
+
+// @Created 13/10/2021
+message CreatePromotionRequest {
+	string code = 1;
+	string sku = 2;
+	uint32 qty = 3;
+	string freebies = 4;
+	uint32 freebiesQty = 5;
+	string type = 6;
+}
+
+// @Created 13/10/2021
+// @Updated 18/10/2021
+message CreatePromotionResponse {
+	Promotion promotion = 1;
+}
+
+// @Created 13/10/2021
+message GetAllPromotionsResponse {
+	repeated Promotion promotions = 1;
+}
+
+// @Created 18/10/2021
+message UpdatePromotionRequest {
+	string id = 1;
+	string code = 2;
+	string sku = 3;
+	uint32 qty = 6;
+	string freebies = 7;
+	uint32 freebiesQty = 8;
+	string type = 9;
+}
+
+// @Created 18/10/2021
+message UpdatePromotionResponse {
+	Promotion promotion = 1;
+}
+
+// @Created 13/10/2021
+message DeletePromotionRequest {
+	string id = 1;
+}
+
+// @Created 13/10/2021
+message DeletePromotionResponse {
+	string id = 1;
+}
+
+// @Created 13/10/2021
+message CheckPromotionRequest {
+	string sku = 1;
+	uint32 qty = 2;
+}
+
+// @Created 13/10/2021
+// @Updated 18/10/2021
+message CheckPromotionResponse {
+	string promotionType = 1;
+	string Freebies = 2;
+	uint32 qty = 3;
+}
+
+// @Created 13/10/2021
+// @Updated 18/10/2021
+service PromotionService {
+	rpc CreatePromotion(CreatePromotionRequest) returns (CreatePromotionResponse);
+	rpc GetAllPromotions(google.protobuf.Empty) returns (GetAllPromotionsResponse);
+	rpc UpdatePromotion(UpdatePromotionRequest) returns (UpdatePromotionResponse);
+	rpc DeletePromotion(DeletePromotionRequest) returns (DeletePromotionResponse);
+	rpc CheckPromotion(CheckPromotionRequest) returns (CheckPromotionResponse);
+}
