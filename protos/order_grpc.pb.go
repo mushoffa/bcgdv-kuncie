@@ -22,7 +22,8 @@ type OrderServiceClient interface {
 	CreateCart(ctx context.Context, in *CreateCartRequest, opts ...grpc.CallOption) (*CreateCartResponse, error)
 	GetCartByID(ctx context.Context, in *GetCartByIDRequest, opts ...grpc.CallOption) (*GetCartByIDResponse, error)
 	GetAllCarts(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*GetAllCartsResponse, error)
-	AddOrderProduct(ctx context.Context, in *AddOrderProductRequest, opts ...grpc.CallOption) (*AddOrderProductResponse, error)
+	AddOrderItem(ctx context.Context, in *AddOrderItemRequest, opts ...grpc.CallOption) (*AddOrderItemResponse, error)
+	RemoveOrderItem(ctx context.Context, in *RemoveOrderItemRequest, opts ...grpc.CallOption) (*RemoveOrderItemResponse, error)
 	CheckoutCart(ctx context.Context, in *CheckoutCartRequest, opts ...grpc.CallOption) (*CheckoutCartResponse, error)
 }
 
@@ -61,9 +62,18 @@ func (c *orderServiceClient) GetAllCarts(ctx context.Context, in *empty.Empty, o
 	return out, nil
 }
 
-func (c *orderServiceClient) AddOrderProduct(ctx context.Context, in *AddOrderProductRequest, opts ...grpc.CallOption) (*AddOrderProductResponse, error) {
-	out := new(AddOrderProductResponse)
-	err := c.cc.Invoke(ctx, "/OrderService/AddOrderProduct", in, out, opts...)
+func (c *orderServiceClient) AddOrderItem(ctx context.Context, in *AddOrderItemRequest, opts ...grpc.CallOption) (*AddOrderItemResponse, error) {
+	out := new(AddOrderItemResponse)
+	err := c.cc.Invoke(ctx, "/OrderService/AddOrderItem", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *orderServiceClient) RemoveOrderItem(ctx context.Context, in *RemoveOrderItemRequest, opts ...grpc.CallOption) (*RemoveOrderItemResponse, error) {
+	out := new(RemoveOrderItemResponse)
+	err := c.cc.Invoke(ctx, "/OrderService/RemoveOrderItem", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +96,8 @@ type OrderServiceServer interface {
 	CreateCart(context.Context, *CreateCartRequest) (*CreateCartResponse, error)
 	GetCartByID(context.Context, *GetCartByIDRequest) (*GetCartByIDResponse, error)
 	GetAllCarts(context.Context, *empty.Empty) (*GetAllCartsResponse, error)
-	AddOrderProduct(context.Context, *AddOrderProductRequest) (*AddOrderProductResponse, error)
+	AddOrderItem(context.Context, *AddOrderItemRequest) (*AddOrderItemResponse, error)
+	RemoveOrderItem(context.Context, *RemoveOrderItemRequest) (*RemoveOrderItemResponse, error)
 	CheckoutCart(context.Context, *CheckoutCartRequest) (*CheckoutCartResponse, error)
 	mustEmbedUnimplementedOrderServiceServer()
 }
@@ -104,8 +115,11 @@ func (UnimplementedOrderServiceServer) GetCartByID(context.Context, *GetCartByID
 func (UnimplementedOrderServiceServer) GetAllCarts(context.Context, *empty.Empty) (*GetAllCartsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllCarts not implemented")
 }
-func (UnimplementedOrderServiceServer) AddOrderProduct(context.Context, *AddOrderProductRequest) (*AddOrderProductResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddOrderProduct not implemented")
+func (UnimplementedOrderServiceServer) AddOrderItem(context.Context, *AddOrderItemRequest) (*AddOrderItemResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddOrderItem not implemented")
+}
+func (UnimplementedOrderServiceServer) RemoveOrderItem(context.Context, *RemoveOrderItemRequest) (*RemoveOrderItemResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveOrderItem not implemented")
 }
 func (UnimplementedOrderServiceServer) CheckoutCart(context.Context, *CheckoutCartRequest) (*CheckoutCartResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CheckoutCart not implemented")
@@ -177,20 +191,38 @@ func _OrderService_GetAllCarts_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
-func _OrderService_AddOrderProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddOrderProductRequest)
+func _OrderService_AddOrderItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddOrderItemRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(OrderServiceServer).AddOrderProduct(ctx, in)
+		return srv.(OrderServiceServer).AddOrderItem(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/OrderService/AddOrderProduct",
+		FullMethod: "/OrderService/AddOrderItem",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OrderServiceServer).AddOrderProduct(ctx, req.(*AddOrderProductRequest))
+		return srv.(OrderServiceServer).AddOrderItem(ctx, req.(*AddOrderItemRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _OrderService_RemoveOrderItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RemoveOrderItemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrderServiceServer).RemoveOrderItem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/OrderService/RemoveOrderItem",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrderServiceServer).RemoveOrderItem(ctx, req.(*RemoveOrderItemRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -233,8 +265,12 @@ var OrderService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _OrderService_GetAllCarts_Handler,
 		},
 		{
-			MethodName: "AddOrderProduct",
-			Handler:    _OrderService_AddOrderProduct_Handler,
+			MethodName: "AddOrderItem",
+			Handler:    _OrderService_AddOrderItem_Handler,
+		},
+		{
+			MethodName: "RemoveOrderItem",
+			Handler:    _OrderService_RemoveOrderItem_Handler,
 		},
 		{
 			MethodName: "CheckoutCart",

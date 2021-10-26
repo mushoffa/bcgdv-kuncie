@@ -5,7 +5,8 @@ option go_package = "github.com/mushoffa/bcgdv-kuncie/protos";
 import "google/protobuf/empty.proto";
 
 // @Created 14/10/2021
-message OrderProduct {
+// @Updated 26/10/2021
+message OrderItem {
 	string sku = 1;
 	string name = 2;
 	double price = 3;
@@ -13,11 +14,12 @@ message OrderProduct {
 }
 
 // @Created 14/10/2021
+// @Updated 26/10/2021
 message Cart {
 	string id = 1;
 	string name = 2;
 	double totalPrice = 3;
-	repeated OrderProduct products = 4;
+	repeated OrderItem items = 4;
 }
 
 // @Created 14/10/2021
@@ -38,11 +40,12 @@ message GetCartByIDRequest {
 }
 
 // @Created 20/10/2021
+// @Updated 26/10/2021
 message GetCartByIDResponse {
 	string id = 1;
 	string name = 2;
 	double totalPrice = 3;
-	repeated OrderProduct items = 4;
+	repeated OrderItem items = 4;
 }
 
 // @Created 20/10/2021
@@ -51,17 +54,30 @@ message GetAllCartsResponse {
 }
 
 // @Created 14/10/2021
-// @Created 20/10/2021
-message AddOrderProductRequest {
+// @Created 26/10/2021
+message AddOrderItemRequest {
 	string id = 1;
 	string sku = 2;
 	uint32 qty = 3;
-	//OrderProduct product = 2;
+	//OrderItem product = 2;
 }
 
 // @Created 14/10/2021
-message AddOrderProductResponse {
+message AddOrderItemResponse {
 	Cart cart = 1;
+}
+
+// @Created 26/10/2021
+// @Updated
+message RemoveOrderItemRequest {
+	string id = 1;
+	string sku = 2;
+}
+
+// @Created 26/10/2021
+// @Updated
+message RemoveOrderItemResponse {
+	Cart order = 1;
 }
 
 // @Created 14/10/2021
@@ -75,11 +91,12 @@ message CheckoutCartResponse {
 }
 
 // @Created 14/10/2021
-// @Updated 20/10/2021
+// @Updated 26/10/2021
 service OrderService {
 	rpc CreateCart(CreateCartRequest) returns (CreateCartResponse);
 	rpc GetCartByID(GetCartByIDRequest) returns (GetCartByIDResponse);
 	rpc GetAllCarts(google.protobuf.Empty) returns (GetAllCartsResponse);
-	rpc AddOrderProduct(AddOrderProductRequest) returns (AddOrderProductResponse);
+	rpc AddOrderItem(AddOrderItemRequest) returns (AddOrderItemResponse);
+	rpc RemoveOrderItem(RemoveOrderItemRequest) returns (RemoveOrderItemResponse);
 	rpc CheckoutCart(CheckoutCartRequest) returns (CheckoutCartResponse);
 }

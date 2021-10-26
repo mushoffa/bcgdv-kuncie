@@ -6,11 +6,11 @@ option go_package = "github.com/mushoffa/bcgdv-kuncie/protos";
 import "google/protobuf/empty.proto";
 
 // @Created 13/10/2021
-// @Updated 18/10/2021
+// @Updated 26/10/2021
 message Promotion {
 	string id = 1;
-	bytes created = 2;
-	bytes updated = 3;
+	string created = 2;
+	string updated = 3;
 	string code = 4;
 	string sku = 5;
 	uint32 qty = 6;
