@@ -63,8 +63,9 @@ message UpdatePriceResponse {
 // @Created 17/10/2021
 // @Updated 26/10/2021
 message UpdateQuantityRequest {
-	string sku = 1;
-	uint32 qty = 2;
+	string id = 1;
+	string sku = 2;
+	uint32 qty = 3;
 }
 
 // @Created 17/10/2021
