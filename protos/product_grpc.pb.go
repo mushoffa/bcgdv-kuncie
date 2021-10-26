@@ -22,8 +22,8 @@ type CatalogServiceClient interface {
 	CreateProduct(ctx context.Context, in *CreateProductRequest, opts ...grpc.CallOption) (*CreateProductResponse, error)
 	GetProductBySKU(ctx context.Context, in *GetProductBySKURequest, opts ...grpc.CallOption) (*GetProductResponse, error)
 	GetAllProducts(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*GetAllProductsResponse, error)
-	AddProductQuantity(ctx context.Context, in *AddProductQuantityRequest, opts ...grpc.CallOption) (*AddProductQuantityResponse, error)
-	UpdateProductPrice(ctx context.Context, in *UpdateProductPriceRequest, opts ...grpc.CallOption) (*UpdateProductPriceResponse, error)
+	UpdatePrice(ctx context.Context, in *UpdatePriceRequest, opts ...grpc.CallOption) (*UpdatePriceResponse, error)
+	UpdateQuantity(ctx context.Context, in *UpdateQuantityRequest, opts ...grpc.CallOption) (*UpdateQuantityResponse, error)
 	CheckoutProduct(ctx context.Context, in *CheckoutProductRequest, opts ...grpc.CallOption) (*CheckoutProductResponse, error)
 	ReturnProduct(ctx context.Context, in *ReturnProductRequest, opts ...grpc.CallOption) (*ReturnProductResponse, error)
 }
@@ -63,18 +63,18 @@ func (c *catalogServiceClient) GetAllProducts(ctx context.Context, in *empty.Emp
 	return out, nil
 }
 
-func (c *catalogServiceClient) AddProductQuantity(ctx context.Context, in *AddProductQuantityRequest, opts ...grpc.CallOption) (*AddProductQuantityResponse, error) {
-	out := new(AddProductQuantityResponse)
-	err := c.cc.Invoke(ctx, "/CatalogService/AddProductQuantity", in, out, opts...)
+func (c *catalogServiceClient) UpdatePrice(ctx context.Context, in *UpdatePriceRequest, opts ...grpc.CallOption) (*UpdatePriceResponse, error) {
+	out := new(UpdatePriceResponse)
+	err := c.cc.Invoke(ctx, "/CatalogService/UpdatePrice", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *catalogServiceClient) UpdateProductPrice(ctx context.Context, in *UpdateProductPriceRequest, opts ...grpc.CallOption) (*UpdateProductPriceResponse, error) {
-	out := new(UpdateProductPriceResponse)
-	err := c.cc.Invoke(ctx, "/CatalogService/UpdateProductPrice", in, out, opts...)
+func (c *catalogServiceClient) UpdateQuantity(ctx context.Context, in *UpdateQuantityRequest, opts ...grpc.CallOption) (*UpdateQuantityResponse, error) {
+	out := new(UpdateQuantityResponse)
+	err := c.cc.Invoke(ctx, "/CatalogService/UpdateQuantity", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -106,8 +106,8 @@ type CatalogServiceServer interface {
 	CreateProduct(context.Context, *CreateProductRequest) (*CreateProductResponse, error)
 	GetProductBySKU(context.Context, *GetProductBySKURequest) (*GetProductResponse, error)
 	GetAllProducts(context.Context, *empty.Empty) (*GetAllProductsResponse, error)
-	AddProductQuantity(context.Context, *AddProductQuantityRequest) (*AddProductQuantityResponse, error)
-	UpdateProductPrice(context.Context, *UpdateProductPriceRequest) (*UpdateProductPriceResponse, error)
+	UpdatePrice(context.Context, *UpdatePriceRequest) (*UpdatePriceResponse, error)
+	UpdateQuantity(context.Context, *UpdateQuantityRequest) (*UpdateQuantityResponse, error)
 	CheckoutProduct(context.Context, *CheckoutProductRequest) (*CheckoutProductResponse, error)
 	ReturnProduct(context.Context, *ReturnProductRequest) (*ReturnProductResponse, error)
 	mustEmbedUnimplementedCatalogServiceServer()
@@ -126,11 +126,11 @@ func (UnimplementedCatalogServiceServer) GetProductBySKU(context.Context, *GetPr
 func (UnimplementedCatalogServiceServer) GetAllProducts(context.Context, *empty.Empty) (*GetAllProductsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllProducts not implemented")
 }
-func (UnimplementedCatalogServiceServer) AddProductQuantity(context.Context, *AddProductQuantityRequest) (*AddProductQuantityResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddProductQuantity not implemented")
+func (UnimplementedCatalogServiceServer) UpdatePrice(context.Context, *UpdatePriceRequest) (*UpdatePriceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdatePrice not implemented")
 }
-func (UnimplementedCatalogServiceServer) UpdateProductPrice(context.Context, *UpdateProductPriceRequest) (*UpdateProductPriceResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateProductPrice not implemented")
+func (UnimplementedCatalogServiceServer) UpdateQuantity(context.Context, *UpdateQuantityRequest) (*UpdateQuantityResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateQuantity not implemented")
 }
 func (UnimplementedCatalogServiceServer) CheckoutProduct(context.Context, *CheckoutProductRequest) (*CheckoutProductResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CheckoutProduct not implemented")
@@ -205,38 +205,38 @@ func _CatalogService_GetAllProducts_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CatalogService_AddProductQuantity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddProductQuantityRequest)
+func _CatalogService_UpdatePrice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdatePriceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CatalogServiceServer).AddProductQuantity(ctx, in)
+		return srv.(CatalogServiceServer).UpdatePrice(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/CatalogService/AddProductQuantity",
+		FullMethod: "/CatalogService/UpdatePrice",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CatalogServiceServer).AddProductQuantity(ctx, req.(*AddProductQuantityRequest))
+		return srv.(CatalogServiceServer).UpdatePrice(ctx, req.(*UpdatePriceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CatalogService_UpdateProductPrice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateProductPriceRequest)
+func _CatalogService_UpdateQuantity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateQuantityRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CatalogServiceServer).UpdateProductPrice(ctx, in)
+		return srv.(CatalogServiceServer).UpdateQuantity(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/CatalogService/UpdateProductPrice",
+		FullMethod: "/CatalogService/UpdateQuantity",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CatalogServiceServer).UpdateProductPrice(ctx, req.(*UpdateProductPriceRequest))
+		return srv.(CatalogServiceServer).UpdateQuantity(ctx, req.(*UpdateQuantityRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -297,12 +297,12 @@ var CatalogService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _CatalogService_GetAllProducts_Handler,
 		},
 		{
-			MethodName: "AddProductQuantity",
-			Handler:    _CatalogService_AddProductQuantity_Handler,
+			MethodName: "UpdatePrice",
+			Handler:    _CatalogService_UpdatePrice_Handler,
 		},
 		{
-			MethodName: "UpdateProductPrice",
-			Handler:    _CatalogService_UpdateProductPrice_Handler,
+			MethodName: "UpdateQuantity",
+			Handler:    _CatalogService_UpdateQuantity_Handler,
 		},
 		{
 			MethodName: "CheckoutProduct",
